@@ -83,7 +83,7 @@ brazilian_cds/
 ### Prerequisites
 
 - Python 3.11 or higher
-- pip package manager
+- pip or [uv](https://github.com/astral-sh/uv) (modern Python package manager)
 - Git
 
 ### Installation
@@ -98,7 +98,12 @@ brazilian_cds/
 2. **Create and activate a virtual environment**:
 
    ```bash
-   # Using pyenv (recommended)
+   # Using uv (recommended - fast and modern)
+   uv venv
+   source .venv/bin/activate  # Linux/Mac
+   # .venv\Scripts\activate   # Windows
+   
+   # Or using pyenv
    pyenv install 3.11
    pyenv virtualenv 3.11 brazilian_cds_feeder
    pyenv activate brazilian_cds_feeder
@@ -112,8 +117,15 @@ brazilian_cds/
 3. **Install dependencies**:
 
    ```bash
+   # Using uv (recommended - faster)
+   uv pip install -r requirements.txt
+   
+   # Or using pip
    pip install --upgrade pip
    pip install -r requirements.txt
+   
+   # Or sync from pyproject.toml (development mode)
+   uv pip install -e ".[dev]"
    ```
 
 4. **Configure environment variables**:
@@ -132,13 +144,34 @@ brazilian_cds/
 6. **Start the API server**:
 
    ```bash
+   # Using the convenience script
    python scripts/start_api.py
+   
+   # Or using uvicorn directly
+   uvicorn main:app --reload
+   
+   # Or using uv
+   uv run uvicorn main:app --reload
    ```
 
 7. **Access the API**:
    - Interactive docs: http://localhost:8000/docs
    - Health check: http://localhost:8000/health
    - Latest data: http://localhost:8000/cds/latest
+
+### Quick Start with uv (One-line setup)
+
+For the fastest setup using modern Python tooling:
+
+```bash
+# Clone, setup, and run
+git clone https://github.com/ideiasfactory/brazillian_cds_datafeeder.git
+cd brazillian_cds_datafeeder
+uv venv && source .venv/bin/activate
+uv pip install -r requirements.txt
+python scripts/update_cds.py
+uvicorn main:app --reload
+```
 
 For detailed setup instructions, see [docs/setup/SETUP_FROM_SCRATCH.md](docs/setup/SETUP_FROM_SCRATCH.md).
 
