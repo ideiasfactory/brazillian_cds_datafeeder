@@ -2,12 +2,16 @@
 tests/
 scripts/
 .github/
+docs/
 *.md
+!README.md
 .env
 .env.example
 .python-version
 brasil_CDS_historical.csv
 brasil_CDS_historical__bkp_*.csv
+update_cds_investing.py
+setup.py
 __pycache__/
 *.pyc
 .pytest_cache/

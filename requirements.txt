@@ -16,4 +16,6 @@ asyncpg
 sqlalchemy[asyncio]
 psycopg2-binary
 
+# ASGI server for production (Vercel uses this internally)
+# uvicorn is already included above with [standard] extras
 

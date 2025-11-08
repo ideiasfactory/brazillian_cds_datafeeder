@@ -1,4 +1,8 @@
-"""Vercel serverless function entry point for FastAPI."""
+"""Vercel serverless function entry point for FastAPI.
+
+Vercel uses @vercel/python runtime which automatically handles ASGI apps.
+The 'app' variable is exposed for Vercel to run with its internal ASGI server.
+"""
 import sys
 from pathlib import Path
 
@@ -8,6 +12,7 @@ sys.path.insert(0, str(project_root))
 
 from src.api.main import app
 
-# Vercel expects a variable named 'app'
+# Vercel expects a variable named 'app' or 'handler'
 # This is the ASGI application that Vercel will run
-handler = app
+# No need for uvicorn here - Vercel handles it internally
+app = app
