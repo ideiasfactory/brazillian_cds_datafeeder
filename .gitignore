@@ -156,3 +156,4 @@ data/*.csv
 !data/brasil_CDS_historical.csv
 
 
+.vercel
