@@ -1,0 +1,14 @@
+# Vercel ignore - exclude unnecessary files from deployment
+tests/
+scripts/
+.github/
+*.md
+.env
+.env.example
+.python-version
+brasil_CDS_historical.csv
+brasil_CDS_historical__bkp_*.csv
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/

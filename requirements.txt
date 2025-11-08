@@ -1,0 +1,19 @@
+# Core dependencies
+pandas
+requests
+lxml
+loguru
+logtail-python
+python-dotenv
+
+# API dependencies
+fastapi
+uvicorn[standard]
+pydantic
+
+# Database dependencies
+asyncpg
+sqlalchemy[asyncio]
+psycopg2-binary
+
+

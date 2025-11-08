@@ -1,0 +1,82 @@
+name: Update CDS Data Daily
+
+on:
+  schedule:
+    # Run every day at 02:00 UTC (23:00 BRT previous day)
+    - cron: '0 2 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-cds-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run CDS data update
+        env:
+          NEON_DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
+          BETTERSTACK_SOURCE_TOKEN: ${{ secrets.BETTERSTACK_SOURCE_TOKEN }}
+          BETTERSTACK_INGESTING_HOST: ${{ secrets.BETTERSTACK_INGESTING_HOST }}
+          LOG_LEVEL: INFO
+          ENVIRONMENT: production
+        run: |
+          python scripts/update_cds.py
+      
+      - name: Commit and push CSV backup (optional)
+        if: success()
+        run: |
+          git config --global user.name 'GitHub Actions Bot'
+          git config --global user.email 'actions@github.com'
+          # Only commit CSV if it exists (for backward compatibility)
+          if [ -f "data/brasil_CDS_historical.csv" ]; then
+            git add data/brasil_CDS_historical.csv
+            git diff --quiet && git diff --staged --quiet || (git commit -m "chore: backup CDS data $(date -u +'%Y-%m-%d %H:%M:%S UTC')" && git push)
+          fi
+      
+      - name: Upload data as artifact (optional)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cds-data-${{ github.run_number }}
+          path: data/brasil_CDS_historical.csv
+          retention-days: 7
+          if-no-files-found: ignore
+      
+      - name: Database status check
+        if: success()
+        env:
+          NEON_DATABASE_URL: ${{ secrets.NEON_DATABASE_URL }}
+          ENVIRONMENT: production
+        run: |
+          python -c "
+          import asyncio
+          from src.storage.postgres_storage import PostgresStorage
+          
+          async def check_status():
+              storage = PostgresStorage()
+              stats = await storage.get_stats()
+              print(f\"✓ Database contains {stats['total_records']} records\")
+              print(f\"✓ Latest record: {stats['latest_date']}\")
+          
+          asyncio.run(check_status())
+          "
+      
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "CDS data update failed. Check logs for details."
