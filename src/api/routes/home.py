@@ -19,6 +19,8 @@ async def home():
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Brazilian CDS Data Feeder</title>
+        <link rel="icon" type="image/svg+xml" href="/favicon.ico">
+        <link rel="alternate icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' style='stop-color:%23667eea'/><stop offset='1' style='stop-color:%23764ba2'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23g)'/><circle cx='30' cy='35' r='15' fill='%2348bb78' opacity='0.9'/><circle cx='70' cy='35' r='15' fill='%23f6e05e' opacity='0.9'/><rect x='20' y='55' width='60' height='8' rx='4' fill='%234299e1' opacity='0.9'/><path d='M 30 70 Q 50 85 70 70' stroke='%23ed8936' stroke-width='5' fill='none' stroke-linecap='round' opacity='0.9'/><text x='50' y='90' font-size='12' text-anchor='middle' fill='white' font-weight='bold'>BR</text></svg>">
         <style>
             * {{
                 margin: 0;

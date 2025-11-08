@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
-from src.api.routes import cds_router, health_router, home_router
+from src.api.routes import cds_router, health_router, home_router, favicon_router
 from src.utils import setup_logging
 
 # Setup logging
@@ -28,6 +28,7 @@ app.add_middleware(
 )
 
 # Include routers
+app.include_router(favicon_router)  # Favicon must be early for browser requests
 app.include_router(home_router)  # Home page must be first for root route
 app.include_router(health_router)
 app.include_router(cds_router)
