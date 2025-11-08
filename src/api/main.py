@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
-from src.api.routes import cds_router, health_router
+from src.api.routes import cds_router, health_router, home_router
 from src.utils import setup_logging
 
 # Setup logging
@@ -28,6 +28,7 @@ app.add_middleware(
 )
 
 # Include routers
+app.include_router(home_router)  # Home page must be first for root route
 app.include_router(health_router)
 app.include_router(cds_router)
 
@@ -47,18 +48,6 @@ async def shutdown_event():
     from src.utils import get_logger
     logger = get_logger()
     logger.info("Shutting down API")
-
-
-@app.get("/", include_in_schema=False)
-async def root():
-    """Root endpoint - redirect to docs."""
-    return {
-        "message": "Brazilian CDS Data API",
-        "version": settings.API_VERSION,
-        "environment": settings.ENVIRONMENT,
-        "docs": "/docs",
-        "health": "/health"
-    }
 
 
 if __name__ == "__main__":

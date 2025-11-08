@@ -1,4 +1,6 @@
 """Pydantic models for API requests and responses."""
+from __future__ import annotations
+
 from datetime import date
 from typing import Optional
 
@@ -7,7 +9,7 @@ from pydantic import BaseModel, Field
 
 class CDSRecord(BaseModel):
     """Single CDS record."""
-    date: date = Field(..., description="Date of the record")
+    record_date: date = Field(..., alias="date", description="Date of the record")
     open: Optional[float] = Field(None, description="Opening value")
     high: Optional[float] = Field(None, description="Highest value")
     low: Optional[float] = Field(None, description="Lowest value")
@@ -15,6 +17,7 @@ class CDSRecord(BaseModel):
     change_pct: Optional[float] = Field(None, description="Percentage change")
     
     class Config:
+        populate_by_name = True
         json_schema_extra = {
             "example": {
                 "date": "2025-11-07",
